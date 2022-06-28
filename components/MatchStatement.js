@@ -15,12 +15,16 @@ const MatchStatement = ({ navigation }) => {
   const [unverifiedStatements, setUnverifiedStatements] = useState([])
   const [verifiedStatements, setVerifiedStatements] = useState([])
 
+  useEffect(() => {
+    loadUnverifiedStatements()
+    showStatements()
+  }, [])
+
   // Later, make api call to get this info
   const loadUnverifiedStatements = () => {
     AsyncStorage.clear((err) => {})
 
     for (let i = 0; i < mockData.length; i++) {
-      // AsyncStorage.setItem(i, JSON.stringify(mockData[i]))
       AsyncStorage.getItem('unverified', (err, result) => {
         if (result === null) {
           AsyncStorage.setItem('unverified', JSON.stringify([mockData[i]]))
@@ -34,30 +38,13 @@ const MatchStatement = ({ navigation }) => {
     }
   }
 
-  const showUnverifiedStatements = () => {
-    setUnverifiedStatements([])
-
+  const showStatements = () => {
     AsyncStorage.getAllKeys((err, keys) => {
-      console.log(keys)
-
       AsyncStorage.multiGet(keys, (err, stores) => {
         stores.map((result, i, store) => {
           if (stores[i][0] === 'unverified')
             setUnverifiedStatements(JSON.parse(store[i][1]))
-        })
-      })
-    })
-  }
-
-  const showVerifiedStatements = () => {
-    setVerifiedStatements([])
-
-    AsyncStorage.getAllKeys((err, keys) => {
-      console.log(keys)
-
-      AsyncStorage.multiGet(keys, (err, stores) => {
-        stores.map((result, i, store) => {
-          if (stores[i][0] === 'verified')
+          else if (stores[i][0] === 'verified')
             setVerifiedStatements(JSON.parse(store[i][1]))
         })
       })
@@ -66,15 +53,11 @@ const MatchStatement = ({ navigation }) => {
 
   return (
     <View>
-      {/* <Statement statement={} /> */}
-      <Button
+      {/* <Button
         title={'Load Unverified Statements'}
         onPress={loadUnverifiedStatements}
-      />
-      <Button
-        title={'Show Unverified Statements'}
-        onPress={showUnverifiedStatements}
-      />
+      />*/}
+      <Button title={'Show Statements'} onPress={showStatements} />
       <View style={styles.statements}>
         {unverifiedStatements.map((statement) => (
           <TouchableOpacity
@@ -87,10 +70,7 @@ const MatchStatement = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-      <Button
-        title={'Show Verified Statements'}
-        onPress={showVerifiedStatements}
-      />
+      <Button title={'Verified Statements'} />
       <View style={styles.statements}>
         {verifiedStatements.map((statement) => (
           <Statement key={statement.key} statement={statement} />
