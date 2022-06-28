@@ -16,11 +16,9 @@ const MatchStatement = ({ navigation }) => {
   const [verifiedStatements, setVerifiedStatements] = useState([])
 
   useEffect(() => {
-    loadUnverifiedStatements()
     showStatements()
   }, [])
 
-  // Later, make api call to get this info
   const loadUnverifiedStatements = () => {
     AsyncStorage.clear((err) => {})
 
@@ -39,6 +37,9 @@ const MatchStatement = ({ navigation }) => {
   }
 
   const showStatements = () => {
+    setUnverifiedStatements([])
+    setVerifiedStatements([])
+
     AsyncStorage.getAllKeys((err, keys) => {
       AsyncStorage.multiGet(keys, (err, stores) => {
         stores.map((result, i, store) => {
@@ -53,11 +54,11 @@ const MatchStatement = ({ navigation }) => {
 
   return (
     <View>
-      {/* <Button
+      <Button
         title={'Load Unverified Statements'}
         onPress={loadUnverifiedStatements}
-      />*/}
-      <Button title={'Show Statements'} onPress={showStatements} />
+      />
+      <Button title={'Verified Statements'} onPress={showStatements} />
       <View style={styles.statements}>
         {unverifiedStatements.map((statement) => (
           <TouchableOpacity

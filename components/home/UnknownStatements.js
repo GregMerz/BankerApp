@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 
-const UnknownStatements = () => {
+const UnknownStatements = ({ text }) => {
   return (
     <View>
-      <Text>Click here to check for unknown statements</Text>
+      <Text>{text}</Text>
     </View>
   )
 }

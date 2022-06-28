@@ -22,17 +22,6 @@ const InfoStatement = ({ navigation }) => {
     if (name === '' || value === null) {
       console.log('Please select all required fields')
     } else {
-      AsyncStorage.getItem('verified', (err, result) => {
-        if (result === null) {
-          AsyncStorage.setItem('verified', JSON.stringify([statement]))
-        } else {
-          let resultArr = JSON.parse(result)
-          resultArr.push(statement)
-
-          AsyncStorage.setItem('verified', JSON.stringify(resultArr))
-        }
-      })
-
       AsyncStorage.getItem('unverified', (err, result) => {
         let resultArr = JSON.parse(result)
 
@@ -45,6 +34,19 @@ const InfoStatement = ({ navigation }) => {
         }
 
         AsyncStorage.setItem('unverified', JSON.stringify(resultArr))
+      })
+
+      statement.title = name
+
+      AsyncStorage.getItem('verified', (err, result) => {
+        if (result === null) {
+          AsyncStorage.setItem('verified', JSON.stringify([statement]))
+        } else {
+          let resultArr = JSON.parse(result)
+          resultArr.push(statement)
+
+          AsyncStorage.setItem('verified', JSON.stringify(resultArr))
+        }
       })
 
       navigation.goBack()

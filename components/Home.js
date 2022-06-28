@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   SafeAreaView,
   View,
@@ -8,20 +8,54 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import UnknownStatements from './home/UnknownStatements'
+import { mockData } from './data/MockData'
 
 const Home = ({ navigation }) => {
+  const [isUnverified, setUnverified] = useState(false)
+  const [text, setText] = useState('Click here to look for unknown statements')
+
+  const checkUnverifiedStatements = () => {
+    if (isUnverified) {
+      navigation.navigate('MatchStatement', {
+        navigation: { navigation },
+      })
+    }
+
+    if (loadUnverifiedStatements) {
+      setUnverified(true)
+      setText('Click here to view unknown statements')
+    }
+  }
+
+  // Later, make api call to get this info
+  const loadUnverifiedStatements = () => {
+    AsyncStorage.clear((err) => {})
+
+    for (let i = 0; i < mockData.length; i++) {
+      AsyncStorage.getItem('unverified', (err, result) => {
+        if (result === null) {
+          AsyncStorage.setItem('unverified', JSON.stringify([mockData[i]]))
+        } else {
+          let resultArr = JSON.parse(result)
+          resultArr.push(mockData[i])
+
+          AsyncStorage.setItem('unverified', JSON.stringify(resultArr))
+        }
+      })
+    }
+
+    return true
+  }
+
   return (
     <SafeAreaView style={styles.main}>
       <TouchableOpacity
         style={styles.unknownStatements}
-        onPress={() =>
-          navigation.navigate('MatchStatement', {
-            navigation: { navigation },
-          })
-        }
+        onPress={checkUnverifiedStatements}
       >
-        <UnknownStatements />
+        <UnknownStatements text={text} />
       </TouchableOpacity>
       <View style={styles.row}>
         <TouchableOpacity
