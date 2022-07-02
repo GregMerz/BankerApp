@@ -29,7 +29,6 @@ const InfoStatement = ({ route, navigation }) => {
         for (let i = 0; i < resultArr.length; i++) {
           if (_.isEqual(resultArr[i], statement)) {
             resultArr.splice(i, 1)
-            console.log('removed')
             break
           }
         }

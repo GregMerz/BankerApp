@@ -10,13 +10,18 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import UnknownStatements from './home/UnknownStatements'
-import { mockData } from './data/MockData'
+import Plaid from '../Plaid'
+import { useTheme } from '../Context'
 
 const Home = ({ navigation }) => {
+  const { dispatch } = useTheme()
+  const [isLoading, setIsLoading] = useState(false)
   const [isUnverified, setUnverified] = useState(false)
   const [text, setText] = useState('Click here to look for unknown statements')
 
   const checkUnverifiedStatements = () => {
+    setIsLoading(true)
+
     if (isUnverified) {
       navigation.navigate('MatchStatement', {
         navigation: { navigation },
@@ -25,37 +30,69 @@ const Home = ({ navigation }) => {
       return
     }
 
-    if (loadUnverifiedStatements()) {
-      setUnverified(true)
-      setText('Click here to view unknown statements')
-    }
+    loadUnverifiedStatements()
   }
 
   // Later, make api call to get this info
-  const loadUnverifiedStatements = () => {
-    AsyncStorage.clear((err) => {})
+  const loadUnverifiedStatements = async () => {
+    AsyncStorage.removeItem('unverified', (err) => {})
 
-    for (let i = 0; i < mockData.length; i++) {
+    const response = await fetch('http://localhost:8000/api/transactions', {
+      method: 'GET',
+    })
+    const data = await response.json()
+    if (data.error != null) {
+      console.log('There is an error getting the transactions')
+      setIsLoading(false)
+      return
+    }
+
+    const transactions = data.latest_transactions
+    console.log(JSON.stringify(transactions))
+
+    for (let i = 0; i < transactions.length; i++) {
+      let transaction = transactions[i]
+
+      let mockData = {
+        key: i,
+        title: transaction.name,
+        cost: transaction.amount,
+      }
+
       AsyncStorage.getItem('unverified', (err, result) => {
         if (result === null) {
-          AsyncStorage.setItem('unverified', JSON.stringify([mockData[i]]))
+          AsyncStorage.setItem('unverified', JSON.stringify([mockData]))
         } else {
           let resultArr = JSON.parse(result)
-          resultArr.push(mockData[i])
+          resultArr.push(mockData)
 
           AsyncStorage.setItem('unverified', JSON.stringify(resultArr))
         }
       })
     }
 
-    return true
+    setUnverified(true)
+    setText('Click here to view unknown statements')
+    setIsLoading(false)
+
+    return
   }
+
+  useEffect(() => {
+    // AsyncStorage.getItem('accessToken', (err, result) => {
+    //   if (result != null) {
+    //     dispatch({ type: 'SET_STATE', state: { accessToken: result } })
+    //   }
+    // })
+  }, [])
 
   return (
     <SafeAreaView style={styles.main}>
       <TouchableOpacity
         style={styles.unknownStatements}
-        onPress={checkUnverifiedStatements}
+        onPress={() => {
+          if (!isLoading) checkUnverifiedStatements()
+        }}
       >
         <UnknownStatements text={text} />
       </TouchableOpacity>
@@ -74,7 +111,7 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
-        <Text>Footer</Text>
+        <Plaid />
       </View>
     </SafeAreaView>
   )

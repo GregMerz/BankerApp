@@ -37,7 +37,7 @@ const Navigator = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
         }}
       >
         {screens.map((screen) => (

@@ -18,7 +18,6 @@ const MatchStatement = ({ navigation }) => {
   const [verifiedStatements, setVerifiedStatements] = useState([])
 
   useEffect(() => {
-    console.log('called')
     if (isFocused) {
       showStatements()
     }

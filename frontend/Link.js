@@ -1,40 +1,83 @@
-import React, { useState } from 'react'
-import { PlaidLink } from 'react-plaid-link'
-import axios from 'axios'
+import React, { useEffect, useCallback } from 'react'
+import { usePlaidLink } from 'react-plaid-link'
+import { useTheme } from './Context'
+import Button from 'plaid-threads/Button'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Link = () => {
-  const [linkToken, setLinkToken] = useState('')
+  const { linkToken, dispatch } = useTheme()
 
-  componentDidMount = async () => {
-    var response = await axios.post('/create_link_token')
-    setLinkToken({ linkToken: response.data['link_token'] })
+  const onSuccess = React.useCallback(
+    (public_token) => {
+      // send public_token to server
+      const setToken = async () => {
+        const response = await fetch(
+          'http://localhost:8000/api/set_access_token',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+            body: `public_token=${public_token}`,
+          },
+        )
+        if (!response.ok) {
+          dispatch({
+            type: 'SET_STATE',
+            state: {
+              itemId: `no item_id retrieved`,
+              accessToken: `no access_token retrieved`,
+              isItemAccess: false,
+            },
+          })
+          return
+        }
+        const data = await response.json()
+        dispatch({
+          type: 'SET_STATE',
+          state: {
+            itemId: data.item_id,
+            accessToken: data.access_token,
+            isItemAccess: true,
+          },
+        })
+
+        AsyncStorage.setItem('accessToken', data.access_token, (err) => {})
+      }
+      setToken()
+      dispatch({ type: 'SET_STATE', state: { linkSuccess: true } })
+      window.history.pushState('', '', '/')
+    },
+    [dispatch],
+  )
+
+  let isOauth = false
+  const config = {
+    token: linkToken,
+    onSuccess,
+    receivedRedirectUri: '',
   }
 
-  handleOnSuccess = async (public_token, metadata) => {
-    // send token to client server
-    var data = {
-      public_token: public_token,
+  if (window.location.href.includes('?oauth_state_id')) {
+    config.receivedRedirectUri = window.location.href
+    isOauth = true
+  }
+
+  const { open, ready } = usePlaidLink(config)
+
+  useEffect(() => {
+    if (isOauth && ready) {
+      open()
     }
-    var response = await axios.post('/exchange_public_token', data)
-    console.log(response)
-    //to do set accessToken into sessionStorage then move onto UI calls in other components.
-    sessionStorage.setItem('accessToken', response.data['access_token'])
-  }
+  }, [ready, open, isOauth])
 
   return (
-    <div>
-      {linkToken.toString !== 'undefined' ? (
-        <PlaidLink
-          token={linkToken.toString()}
-          env="sandbox"
-          onSuccess={this.handleOnSuccess}
-          onExit={this.handleOnExit}
-        >
-          Connect Bank Account
-        </PlaidLink>
-      ) : null}
-    </div>
+    <Button type="button" small onClick={() => open()} disabled={!ready}>
+      Launch Link
+    </Button>
   )
 }
+
+Link.displayName = 'Link'
 
 export default Link
