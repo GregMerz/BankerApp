@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react'
 import { Text, View } from 'react-native'
-import Header from './Header'
-import Transaction from './Transaction'
 
-import { useTheme, useThemeUpdate } from './Context'
+import Header from './Header'
+
+import { useTheme, useThemeUpdate } from '../../Context'
 
 const Plaid = () => {
   const { accessToken, dispatch } = useTheme()
@@ -32,6 +32,7 @@ const Plaid = () => {
         method: 'POST',
       })
       if (!response.ok) {
+        console.log('got here')
         dispatch({ type: 'SET_STATE', state: { linkToken: null } })
         return
       }

@@ -5,7 +5,6 @@ import Home from './components/Home'
 import InfoStatement from './components/InfoStatement'
 import MatchStatement from './components/MatchStatement'
 import Vacation from './components/Vacation'
-import Link from './Link'
 
 const screens = [
   {

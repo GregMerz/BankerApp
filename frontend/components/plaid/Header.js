@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { View, Text } from 'react-native'
-import { useTheme, useThemeUpdate } from './Context'
+
+import { useTheme } from '../../Context'
 
 import Link from './Link'
 

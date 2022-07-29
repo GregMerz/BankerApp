@@ -1,6 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
+
+import { useTheme } from '../../Context'
+
 import { usePlaidLink } from 'react-plaid-link'
-import { useTheme } from './Context'
 import Button from 'plaid-threads/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 

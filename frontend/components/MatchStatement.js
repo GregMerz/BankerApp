@@ -10,7 +10,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import Statement from './Statement'
-import { mockData } from './data/MockData'
 
 const MatchStatement = ({ navigation }) => {
   const isFocused = useIsFocused()

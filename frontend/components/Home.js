@@ -10,11 +10,13 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import UnknownStatements from './home/UnknownStatements'
-import Plaid from '../Plaid'
+import Plaid from './plaid/Plaid'
 import { useTheme } from '../Context'
+import { transformTransactionData } from '../dataUtilities'
 
 const Home = ({ navigation }) => {
   const { dispatch } = useTheme()
+
   const [isLoading, setIsLoading] = useState(false)
   const [isUnverified, setUnverified] = useState(false)
   const [text, setText] = useState('Click here to look for unknown statements')
@@ -40,6 +42,8 @@ const Home = ({ navigation }) => {
     const response = await fetch('http://localhost:8000/api/transactions', {
       method: 'GET',
     })
+
+    // This part should be done in the backend
     const data = await response.json()
     if (data.error != null) {
       console.log('There is an error getting the transactions')
@@ -47,25 +51,18 @@ const Home = ({ navigation }) => {
       return
     }
 
-    const transactions = data.latest_transactions
-    console.log(JSON.stringify(transactions))
+    const transformedData = transformTransactionData(data)
 
-    for (let i = 0; i < transactions.length; i++) {
-      let transaction = transactions[i]
-
-      let mockData = {
-        key: i,
-        title: transaction.name,
-        cost: transaction.amount,
-      }
-
+    for (let i = 0; i < transformedData.length; i++) {
       AsyncStorage.getItem('unverified', (err, result) => {
         if (result === null) {
-          AsyncStorage.setItem('unverified', JSON.stringify([mockData]))
+          AsyncStorage.setItem(
+            'unverified',
+            JSON.stringify([transformedData[i]]),
+          )
         } else {
           let resultArr = JSON.parse(result)
-          resultArr.push(mockData)
-
+          resultArr.push(transformedData[i])
           AsyncStorage.setItem('unverified', JSON.stringify(resultArr))
         }
       })
