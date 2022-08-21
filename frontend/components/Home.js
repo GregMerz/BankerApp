@@ -35,15 +35,11 @@ const Home = ({ navigation }) => {
     loadUnverifiedStatements()
   }
 
-  // Later, make api call to get this info
   const loadUnverifiedStatements = async () => {
-    AsyncStorage.removeItem('unverified', (err) => {})
-
     const response = await fetch('http://localhost:8000/api/transactions', {
       method: 'GET',
     })
 
-    // This part should be done in the backend
     const data = await response.json()
     if (data.error != null) {
       console.log('There is an error getting the transactions')
@@ -54,18 +50,26 @@ const Home = ({ navigation }) => {
     const transformedData = transformTransactionData(data)
 
     for (let i = 0; i < transformedData.length; i++) {
-      AsyncStorage.getItem('unverified', (err, result) => {
-        if (result === null) {
-          AsyncStorage.setItem(
-            'unverified',
-            JSON.stringify([transformedData[i]]),
-          )
-        } else {
-          let resultArr = JSON.parse(result)
-          resultArr.push(transformedData[i])
-          AsyncStorage.setItem('unverified', JSON.stringify(resultArr))
-        }
+      var transaction = new Object()
+
+      transaction.description = transformedData[i].description
+      transaction.price = transformedData[i].price
+      transaction.verified = false
+
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+
+      fetch('http://localhost:8080/transactions/addUnverified', {
+        method: 'POST',
+        body: JSON.stringify(transaction),
+        headers: headers,
       })
+        .then((res) => {
+          console.log("Success")
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
 
     setUnverified(true)

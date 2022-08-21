@@ -4,8 +4,8 @@ import { View, Text, StyleSheet } from 'react-native'
 const Statement = ({ statement }) => {
   return (
     <View style={styles.statement}>
-      <Text>{statement.title}</Text>
-      <Text>$ {statement.cost}</Text>
+      <Text>{statement.description}</Text>
+      <Text>$ {statement.price}</Text>
     </View>
   )
 }

@@ -23,31 +23,26 @@ const InfoStatement = ({ route, navigation }) => {
     if (name === '' || value === null) {
       console.log('Please select all required fields')
     } else {
-      AsyncStorage.getItem('unverified', (err, result) => {
-        let resultArr = JSON.parse(result)
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
 
-        for (let i = 0; i < resultArr.length; i++) {
-          if (_.isEqual(resultArr[i], statement)) {
-            resultArr.splice(i, 1)
-            break
-          }
-        }
+      const payload = new Object()
+      payload.id = statement.id
+      payload.description = name
+      payload.category = value
 
-        AsyncStorage.setItem('unverified', JSON.stringify(resultArr))
+      fetch('http://localhost:8080/transactions/update', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: headers,
       })
-
-      statement.title = name
-
-      AsyncStorage.getItem('verified', (err, result) => {
-        if (result === null) {
-          AsyncStorage.setItem('verified', JSON.stringify([statement]))
-        } else {
-          let resultArr = JSON.parse(result)
-          resultArr.push(statement)
-
-          AsyncStorage.setItem('verified', JSON.stringify(resultArr))
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+        })
+        .catch((err) => {
+          console.log("Failed")
+        })
 
       navigation.goBack()
     }

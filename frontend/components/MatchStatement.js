@@ -26,16 +26,19 @@ const MatchStatement = ({ navigation }) => {
     setUnverifiedStatements([])
     setVerifiedStatements([])
 
-    AsyncStorage.getAllKeys((err, keys) => {
-      AsyncStorage.multiGet(keys, (err, stores) => {
-        stores.map((result, i, store) => {
-          if (stores[i][0] === 'unverified')
-            setUnverifiedStatements(JSON.parse(store[i][1]))
-          else if (stores[i][0] === 'verified')
-            setVerifiedStatements(JSON.parse(store[i][1]))
-        })
+    fetch('http://localhost:8080/transactions/all', {
+        method: 'GET',
       })
-    })
+        .then((res) => res.json())
+        .then((data) => {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].verified === false) {
+              setUnverifiedStatements(oldArray => [...oldArray, data[i]])
+            } else {
+              setVerifiedStatements(oldArray => [...oldArray, data[i]])
+            }
+          }
+        })
   }
 
   return (
@@ -44,7 +47,7 @@ const MatchStatement = ({ navigation }) => {
       <View style={styles.statements}>
         {unverifiedStatements.map((statement) => (
           <TouchableOpacity
-            key={statement.key}
+            key={statement.id}
             onPress={() => {
               navigation.navigate('InfoStatement', { info: { statement } })
             }}
