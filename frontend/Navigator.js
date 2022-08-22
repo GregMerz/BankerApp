@@ -5,8 +5,18 @@ import Home from './components/Home'
 import InfoStatement from './components/InfoStatement'
 import MatchStatement from './components/MatchStatement'
 import Vacation from './components/Vacation'
+import SignUp from './components/SignUp'
+import SignIn from './components/SignIn'
 
 const screens = [
+  {
+    name: 'SignUp',
+    component: SignUp,
+  },
+  {
+    name: 'SignIn',
+    component: SignIn,
+  },
   {
     name: 'Home',
     component: Home,

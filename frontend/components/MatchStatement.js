@@ -43,6 +43,7 @@ const MatchStatement = ({ navigation }) => {
 
   return (
     <View>
+      <Button onPress={navigation.goBack()}/>
       <Button title={'Verified Statements'} />
       <View style={styles.statements}>
         {unverifiedStatements.map((statement) => (

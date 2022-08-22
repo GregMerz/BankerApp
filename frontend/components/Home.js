@@ -25,9 +25,7 @@ const Home = ({ navigation }) => {
     setIsLoading(true)
 
     if (isUnverified) {
-      navigation.navigate('MatchStatement', {
-        navigation: { navigation },
-      })
+      navigation.navigate('MatchStatement')
 
       return
     }
