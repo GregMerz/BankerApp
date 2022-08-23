@@ -27,8 +27,9 @@ const SignUp = ({ navigation }) => {
         body: JSON.stringify(user),
         headers: headers,
         })
-          .then((res) => {
-            console.log("Created the user")
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("Created the user: " + JSON.stringify(data))
             navigation.navigate("SignIn")
           })
           .catch((err) => {
@@ -46,12 +47,14 @@ const SignUp = ({ navigation }) => {
                 Password:
                 <TextInput onChangeText={setUserPassword} value={userPassword} placeholder={'password'} />
             </Text>
-            <Button onPress={handleSubmit}>
-                <Text>Sign Up</Text>
-            </Button>
-            <Button onPress={navigation.navigate('SignIn')}>
-                <Text>Already Have An Account</Text>
-            </Button>
+            <Button 
+                onPress={handleSubmit} 
+                title="Confirm" 
+            />
+            <Button 
+                onPress={() => navigation.navigate('SignIn')}
+                title="Already have an account"
+            />
         </View>
     )
 }
