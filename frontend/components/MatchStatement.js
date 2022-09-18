@@ -27,24 +27,24 @@ const MatchStatement = ({ navigation }) => {
     setVerifiedStatements([])
 
     fetch('http://localhost:8080/transactions/all', {
-        method: 'GET',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].verified === false) {
-              setUnverifiedStatements(oldArray => [...oldArray, data[i]])
-            } else {
-              setVerifiedStatements(oldArray => [...oldArray, data[i]])
-            }
+      method: 'GET',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].verified === false) {
+            setUnverifiedStatements((oldArray) => [...oldArray, data[i]])
+          } else {
+            setVerifiedStatements((oldArray) => [...oldArray, data[i]])
           }
-        })
+        }
+      })
   }
 
   return (
     <View>
-      <Button onPress={navigation.goBack()}/>
-      <Button title={'Verified Statements'} />
+      <Button title={'Go Back'} onPress={() => navigation.goBack()} />
+      <Button title={'Unverified Statements'} />
       <View style={styles.statements}>
         {unverifiedStatements.map((statement) => (
           <TouchableOpacity
