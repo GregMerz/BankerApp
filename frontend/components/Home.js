@@ -15,7 +15,7 @@ import { useTheme } from '../Context'
 import { transformTransactionData } from '../dataUtilities'
 
 const Home = ({ navigation }) => {
-  // const { dispatch } = useTheme()
+  const { dispatch } = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUnverified, setUnverified] = useState(false)
@@ -23,16 +23,16 @@ const Home = ({ navigation }) => {
 
   // Uncomment this for plaid
   const checkUnverifiedStatements = () => {
-    // setIsLoading(true)
-    // if (isUnverified) {
-    navigation.navigate('MatchStatement')
-    //   return
-    // }
-    // loadUnverifiedStatements()
+    setIsLoading(true)
+    if (isUnverified) {
+      navigation.navigate('MatchStatement')
+      return
+    }
+    loadUnverifiedStatements()
   }
 
   const loadUnverifiedStatements = async () => {
-    const response = await fetch('http://localhost:8000/api/transactions', {
+    const response = await fetch('http://localhost:8080/plaid/transactions', {
       method: 'GET',
     })
 
@@ -88,6 +88,7 @@ const Home = ({ navigation }) => {
       <TouchableOpacity
         style={styles.unknownStatements}
         onPress={() => {
+          console.log(isLoading)
           if (!isLoading) checkUnverifiedStatements()
         }}
       >
@@ -107,7 +108,9 @@ const Home = ({ navigation }) => {
           <Text>Budgeting Dashboard</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.footer}>{/* <Plaid /> */}</View>
+      <View style={styles.footer}>
+        <Plaid />
+      </View>
     </SafeAreaView>
   )
 }

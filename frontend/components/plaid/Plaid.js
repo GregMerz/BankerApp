@@ -9,7 +9,7 @@ const Plaid = () => {
   const { accessToken, dispatch } = useTheme()
 
   const getInfo = useCallback(async () => {
-    const response = await fetch('http://localhost:8000/api/info', {
+    const response = await fetch('http://localhost:8080/plaid/info', {
       method: 'POST',
     })
     if (!response.ok) {
@@ -25,9 +25,10 @@ const Plaid = () => {
 
   const generateToken = useCallback(
     async (paymentInitiation) => {
-      const path = paymentInitiation
-        ? 'http://localhost:8000/api/create_link_token_for_payment'
-        : 'http://localhost:8000/api/create_link_token'
+      // const path = paymentInitiation
+      //   ? 'http://localhost:8000/api/create_link_token_for_payment'
+      //   : 'http://localhost:8000/api/create_link_token'
+      const path = 'http://localhost:8080/plaid/create_link_token'
       const response = await fetch(path, {
         method: 'POST',
       })

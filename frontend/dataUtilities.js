@@ -1,8 +1,8 @@
 export const transformTransactionData = (data) => {
-  return data.latest_transactions.map((t, index) => {
+  return data.map((t, index) => {
     const item = {
       key: index,
-      description: t.name, 
+      description: t.name,
       price: t.amount,
     }
     return item

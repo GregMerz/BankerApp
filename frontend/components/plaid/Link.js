@@ -9,18 +9,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const Link = () => {
   const { linkToken, dispatch } = useTheme()
 
-  const onSuccess = React.useCallback(
+  const onSuccess = useCallback(
     (public_token) => {
       // send public_token to server
       const setToken = async () => {
         const response = await fetch(
-          'http://localhost:8000/api/set_access_token',
+          `http://localhost:8080/plaid/set_access_token?public_token=${public_token}`,
           {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            },
-            body: `public_token=${public_token}`,
           },
         )
         if (!response.ok) {
