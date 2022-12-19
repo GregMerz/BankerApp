@@ -6,7 +6,7 @@ import Header from './Header'
 import { useTheme, useThemeUpdate } from '../../Context'
 
 const Plaid = () => {
-  const { accessToken, dispatch } = useTheme()
+  const { dispatch } = useTheme()
 
   const getInfo = useCallback(async () => {
     const response = await fetch('http://localhost:8080/plaid/info', {

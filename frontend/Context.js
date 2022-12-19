@@ -8,6 +8,7 @@ export function useTheme() {
 
 export const QuickstartProvider = ({ children }) => {
   const initialState = {
+    extId: '',
     linkSuccess: false,
     isItemAccess: true,
     linkToken: '', // Don't set to null or error message will show up briefly when site loads

@@ -15,13 +15,15 @@ import { useTheme } from '../Context'
 import { transformTransactionData } from '../dataUtilities'
 
 const Home = ({ navigation }) => {
-  const { dispatch } = useTheme()
+  const { extId, accessToken } = useTheme()
+
+  console.log('This is the id: ' + extId)
+  console.log('This is the access token: ' + accessToken)
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUnverified, setUnverified] = useState(false)
   const [text, setText] = useState('Click here to look for unknown statements')
 
-  // Uncomment this for plaid
   const checkUnverifiedStatements = () => {
     setIsLoading(true)
     if (isUnverified) {
@@ -74,14 +76,6 @@ const Home = ({ navigation }) => {
 
     return
   }
-
-  useEffect(() => {
-    // AsyncStorage.getItem('accessToken', (err, result) => {
-    //   if (result != null) {
-    //     dispatch({ type: 'SET_STATE', state: { accessToken: result } })
-    //   }
-    // })
-  }, [])
 
   return (
     <SafeAreaView style={styles.main}>

@@ -4,17 +4,16 @@ import { useTheme } from '../../Context'
 
 import { usePlaidLink } from 'react-plaid-link'
 import Button from 'plaid-threads/Button'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Link = () => {
-  const { linkToken, dispatch } = useTheme()
+  const { linkToken, dispatch, extId } = useTheme()
 
   const onSuccess = useCallback(
     (public_token) => {
       // send public_token to server
       const setToken = async () => {
         const response = await fetch(
-          `http://localhost:8080/plaid/set_access_token?public_token=${public_token}`,
+          `http://localhost:8080/plaid/set_access_token?public_token=${public_token}&id=${extId}`,
           {
             method: 'POST',
           },
@@ -39,8 +38,6 @@ const Link = () => {
             isItemAccess: true,
           },
         })
-
-        AsyncStorage.setItem('accessToken', data.access_token, (err) => {})
       }
       setToken()
       dispatch({ type: 'SET_STATE', state: { linkSuccess: true } })

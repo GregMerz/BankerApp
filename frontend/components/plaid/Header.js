@@ -44,7 +44,7 @@ const Header = () => {
           )}
         </View>
       ) : (
-        <Text>Click here to load your transactions</Text>
+        <Text>You have gotten access, good job!</Text>
       )}
     </View>
   )
