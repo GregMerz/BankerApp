@@ -15,10 +15,7 @@ import { useTheme } from '../Context'
 import { transformTransactionData } from '../dataUtilities'
 
 const Home = ({ navigation }) => {
-  const { extId, accessToken } = useTheme()
-
-  console.log('This is the id: ' + extId)
-  console.log('This is the access token: ' + accessToken)
+  const { extId } = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUnverified, setUnverified] = useState(false)
@@ -26,17 +23,20 @@ const Home = ({ navigation }) => {
 
   const checkUnverifiedStatements = () => {
     setIsLoading(true)
-    if (isUnverified) {
-      navigation.navigate('MatchStatement')
-      return
-    }
-    loadUnverifiedStatements()
+    // if (isUnverified) {
+    navigation.navigate('MatchStatement')
+    return
+    // }
+    // loadUnverifiedStatements()
   }
 
   const loadUnverifiedStatements = async () => {
-    const response = await fetch('http://localhost:8080/plaid/transactions', {
-      method: 'GET',
-    })
+    const response = await fetch(
+      `http://localhost:8080/plaid/transactions?id=${extId}`,
+      {
+        method: 'GET',
+      },
+    )
 
     const data = await response.json()
     if (data.error != null) {
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: '6rem',
   },
   row: {
     flex: 6,

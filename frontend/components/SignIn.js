@@ -8,22 +8,27 @@ const SignIn = ({ navigation }) => {
 
   const { dispatch } = useTheme()
 
-  const handleSubmit = () => {
+  const checkValidFields = () => {
     if (!userEmail) {
       alert('Please fill out your email')
-      return
+      return false
     }
     if (!userPassword) {
       alert('Please fill out your password')
-      return
+      return false
     }
 
+    return true
+  }
+
+  const logIn = () => {
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
 
-    var user = new Object()
-    user.email = userEmail
-    user.password = userPassword
+    const user = {
+      email: userEmail,
+      password: userPassword,
+    }
 
     fetch('http://localhost:8080/users/login', {
       method: 'POST',
@@ -45,6 +50,13 @@ const SignIn = ({ navigation }) => {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  const handleSubmit = () => {
+    const isFormCompleted = checkValidFields()
+
+    if (!isFormCompleted) return
+    logIn()
   }
 
   return (
