@@ -28,6 +28,7 @@ const Home = ({ navigation }) => {
     return
     // }
     // loadUnverifiedStatements()
+    //s
   }
 
   const loadUnverifiedStatements = async () => {
