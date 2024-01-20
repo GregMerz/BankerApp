@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   SafeAreaView,
   View,
@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import UnknownStatements from './home/UnknownStatements'
 import Plaid from './plaid/Plaid'
 import { useTheme } from '../Context'
@@ -23,12 +22,12 @@ const Home = ({ navigation }) => {
 
   const checkUnverifiedStatements = () => {
     setIsLoading(true)
-    // if (isUnverified) {
-    navigation.navigate('MatchStatement')
-    return
-    // }
-    // loadUnverifiedStatements()
-    //s
+    if (isUnverified) {
+      setIsLoading(false)
+      navigation.navigate('MatchStatement')
+      return
+    }
+    loadUnverifiedStatements()
   }
 
   const loadUnverifiedStatements = async () => {
@@ -58,7 +57,7 @@ const Home = ({ navigation }) => {
       const headers = new Headers()
       headers.append('Content-Type', 'application/json')
 
-      fetch('http://localhost:8080/transactions/addUnverified', {
+      fetch(`http://localhost:8080/transactions/addUnverified?userId=${extId}`, {
         method: 'POST',
         body: JSON.stringify(transaction),
         headers: headers,

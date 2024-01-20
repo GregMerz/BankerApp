@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react'
-import { Text, View } from 'react-native'
+import {  View } from 'react-native'
 
 import Header from './Header'
 
-import { useTheme, useThemeUpdate } from '../../Context'
+import { useTheme } from '../../Context'
 
 const Plaid = () => {
   const { dispatch } = useTheme()

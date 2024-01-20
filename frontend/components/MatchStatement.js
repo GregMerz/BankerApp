@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-  SafeAreaView,
   View,
-  Text,
   Button,
   StyleSheet,
   TouchableOpacity,
@@ -10,11 +8,14 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import Statement from './Statement'
+import { useTheme } from '../Context'
 
 const MatchStatement = ({ navigation }) => {
   const isFocused = useIsFocused()
   const [unverifiedStatements, setUnverifiedStatements] = useState([])
   const [verifiedStatements, setVerifiedStatements] = useState([])
+
+  const { extId } = useTheme()
 
   useEffect(() => {
     if (isFocused) {
@@ -26,7 +27,7 @@ const MatchStatement = ({ navigation }) => {
     setUnverifiedStatements([])
     setVerifiedStatements([])
 
-    fetch('http://localhost:8080/transactions/all', {
+    fetch(`http://localhost:8080/transactions/all?userId=${extId}`, {
       method: 'GET',
     })
       .then((res) => res.json())
