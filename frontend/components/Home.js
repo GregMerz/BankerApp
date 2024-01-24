@@ -21,13 +21,13 @@ const Home = ({ navigation }) => {
   const [text, setText] = useState('Click here to look for unknown statements')
 
   const checkUnverifiedStatements = () => {
-    setIsLoading(true)
-    if (isUnverified) {
-      setIsLoading(false)
+    // setIsLoading(true)
+    // if (isUnverified) {
+    //   setIsLoading(false)
       navigation.navigate('MatchStatement')
       return
-    }
-    loadUnverifiedStatements()
+    // }
+    // loadUnverifiedStatements()
   }
 
   const loadUnverifiedStatements = async () => {
@@ -82,7 +82,6 @@ const Home = ({ navigation }) => {
       <TouchableOpacity
         style={styles.unknownStatements}
         onPress={() => {
-          console.log(isLoading)
           if (!isLoading) checkUnverifiedStatements()
         }}
       >
