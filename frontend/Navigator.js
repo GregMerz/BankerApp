@@ -9,14 +9,14 @@ import SignUp from './components/SignUp'
 import SignIn from './components/SignIn'
 
 const screens = [
-  {
-    name: 'SignIn',
-    component: SignIn,
-  },
-  {
-    name: 'SignUp',
-    component: SignUp,
-  },
+  // {
+  //   name: 'SignIn',
+  //   component: SignIn,
+  // },
+  // {
+  //   name: 'SignUp',
+  //   component: SignUp,
+  // },
   {
     name: 'Home',
     component: Home,

@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Platform,
 } from 'react-native'
 import UnknownStatements from './home/UnknownStatements'
@@ -78,33 +79,45 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.main}>
-      <TouchableOpacity
-        style={styles.unknownStatements}
-        onPress={() => {
-          if (!isLoading) checkUnverifiedStatements()
-        }}
-      >
-        <UnknownStatements text={text} />
-      </TouchableOpacity>
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.vacation}
-          onPress={() => navigation.navigate('Vacation')}
-        >
-          <Text>Plan a vacation</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.budgetDashboard}
-          onPress={() => navigation.navigate('BudgetDashboard')}
-        >
-          <Text>Budgeting Dashboard</Text>
-        </TouchableOpacity>
+    <View>
+      <View style={styles.navbar}>
+        <Text style={{fontSize: '1.625rem'}}>Banker</Text>
+        <TouchableWithoutFeedback>
+          <View style={styles.hamburgerIcon}>
+            <View style={styles.hamburgerBars}></View>
+            <View style={styles.hamburgerBars}></View>
+            <View style={styles.hamburgerBars}></View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
-      <View style={styles.footer}>
-        <Plaid />
-      </View>
-    </SafeAreaView>
+    </View>
+    // <SafeAreaView style={styles.main}>
+    //   <TouchableOpacity
+    //     style={styles.unknownStatements}
+    //     onPress={() => {
+    //       if (!isLoading) checkUnverifiedStatements()
+    //     }}
+    //   >
+    //     <UnknownStatements text={text} />
+    //   </TouchableOpacity>
+    //   <View style={styles.row}>
+    //     <TouchableOpacity
+    //       style={styles.vacation}
+    //       onPress={() => navigation.navigate('Vacation')}
+    //     >
+    //       <Text>Plan a vacation</Text>
+    //     </TouchableOpacity>
+    //     <TouchableOpacity
+    //       style={styles.budgetDashboard}
+    //       onPress={() => navigation.navigate('BudgetDashboard')}
+    //     >
+    //       <Text>Budgeting Dashboard</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    //   <View style={styles.footer}>
+    //     <Plaid />
+    //   </View>
+    // </SafeAreaView>
   )
 }
 
@@ -143,6 +156,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  navbar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: '2rem',
+    alignItems: 'center',
+  },
+  hamburgerIcon: {
+    position: 'relative',
+    width: '25px',
+    height: '18px',
+    // flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+  },
+  hamburgerBars: {
+    borderRadius: '5rem',
+    backgroundColor: 'black',
+    height: '4px',
+  }
 })
 
 export default Home
