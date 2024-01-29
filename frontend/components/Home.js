@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
+import styled from 'styled-components/native';
 import {
   SafeAreaView,
   View,
@@ -80,16 +81,22 @@ const Home = ({ navigation }) => {
 
   return (
     <View>
-      <View style={styles.navbar}>
+      <Navbar>
         <Text style={{fontSize: '1.625rem'}}>Banker</Text>
         <TouchableWithoutFeedback>
-          <View style={styles.hamburgerIcon}>
-            <View style={styles.hamburgerBars}></View>
-            <View style={styles.hamburgerBars}></View>
-            <View style={styles.hamburgerBars}></View>
-          </View>
+          <HamburgerIcon>
+            <HamburgerBars></HamburgerBars>
+            <HamburgerBars></HamburgerBars>
+            <HamburgerBars></HamburgerBars>
+          </HamburgerIcon>
         </TouchableWithoutFeedback>
-      </View>
+      </Navbar>
+
+      <GridContainer>
+        <StatementContainer>
+          <Text>Hello</Text>
+        </StatementContainer>
+      </GridContainer>
     </View>
     // <SafeAreaView style={styles.main}>
     //   <TouchableOpacity
@@ -121,60 +128,39 @@ const Home = ({ navigation }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-  },
-  unknownStatements: {
-    flex: 2,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '6rem',
-  },
-  row: {
-    flex: 6,
-    flexDirection: 'row',
-  },
-  vacation: {
-    flex: 1,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  budgetDashboard: {
-    flex: 1,
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footer: {
-    flex: 1,
-    backgroundColor: 'brown',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navbar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: '2rem',
-    alignItems: 'center',
-  },
-  hamburgerIcon: {
-    position: 'relative',
-    width: '25px',
-    height: '18px',
-    // flexDirection: 'column',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-  },
-  hamburgerBars: {
-    borderRadius: '5rem',
-    backgroundColor: 'black',
-    height: '4px',
-  }
-})
+const Navbar = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 2rem;
+  align-items: center;
+`;
+
+const HamburgerIcon = styled.View`
+  position: relative;
+  width: 25px;
+  height: 18px;
+  // flexDirection: column;
+  justify-content: space-between;
+  background-color: white;
+`;
+
+const HamburgerBars = styled.View`
+  border-radius: 5rem;
+  background-color: black;
+  height: 4px;
+`;
+
+const GridContainer = styled.View`
+  background: red;
+  flex: 2;
+  margin-inline: auto;
+  width: 400px;
+  height: 100%;
+`;
+
+const StatementContainer = styled.View`
+  background-color: blue;
+  flex: 2;
+`;
 
 export default Home
