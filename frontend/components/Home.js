@@ -80,31 +80,43 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <View>
-      <Navbar>
-        <Text style={{fontSize: '1.625rem'}}>Banker</Text>
-        <TouchableWithoutFeedback>
-          <HamburgerIcon>
-            <HamburgerBars></HamburgerBars>
-            <HamburgerBars></HamburgerBars>
-            <HamburgerBars></HamburgerBars>
-          </HamburgerIcon>
-        </TouchableWithoutFeedback>
-      </Navbar>
+    <View style={{minHeight: '100vh',backgroundColor: '#CCCCCC'}}>
+        <Navbar>
+          <Text style={{fontSize: '1.625rem'}}>Banker</Text>
+          <TouchableWithoutFeedback>
+            <HamburgerIcon>
+              <HamburgerBars></HamburgerBars>
+              <HamburgerBars></HamburgerBars>
+              <HamburgerBars></HamburgerBars>
+            </HamburgerIcon>
+          </TouchableWithoutFeedback>
+        </Navbar>
 
-      <GridContainer>
-        <StatementContainer>
-          <Text>Hello</Text>
-        </StatementContainer>
-      </GridContainer>
+        <GridContainer>
+          <LinkContainer onClick={() => {
+              if (!isLoading) checkUnverifiedStatements()
+            }}
+          >
+            <Text>Look at statements</Text>
+          </LinkContainer>
+          <LinkContainer onClick={() => navigation.navigate('Vacation')}>
+            <Text>Look at vacation</Text>
+          </LinkContainer>
+          <LinkContainer onClick={() => navigation.navigate('BudgetDashboard')}>
+            <Text>Look at budget</Text>
+          </LinkContainer>
+          <LinkContainer>
+            <Plaid />
+          </LinkContainer>
+        </GridContainer>
     </View>
     // <SafeAreaView style={styles.main}>
     //   <TouchableOpacity
     //     style={styles.unknownStatements}
-    //     onPress={() => {
-    //       if (!isLoading) checkUnverifiedStatements()
-    //     }}
-    //   >
+        // onPress={() => {
+        //   if (!isLoading) checkUnverifiedStatements()
+        // }}
+      // >
     //     <UnknownStatements text={text} />
     //   </TouchableOpacity>
     //   <View style={styles.row}>
@@ -129,6 +141,7 @@ const Home = ({ navigation }) => {
 }
 
 const Navbar = styled.View`
+  height: 6rem;
   flex-direction: row;
   justify-content: space-between;
   padding: 2rem;
@@ -141,7 +154,7 @@ const HamburgerIcon = styled.View`
   height: 18px;
   // flexDirection: column;
   justify-content: space-between;
-  background-color: white;
+  background-color: transparent;
 `;
 
 const HamburgerBars = styled.View`
@@ -151,16 +164,21 @@ const HamburgerBars = styled.View`
 `;
 
 const GridContainer = styled.View`
-  background: red;
-  flex: 2;
-  margin-inline: auto;
-  width: 400px;
-  height: 100%;
+  margin: 1rem;
 `;
 
-const StatementContainer = styled.View`
+const LinkContainer = styled.View`
+  position: relative;
   background-color: blue;
-  flex: 2;
+  border-radius: .5rem;
+  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  height: 8rem;
+  margin-bottom: 2rem;
+`;
+
+const StatementButton = styled.TouchableOpacity`
 `;
 
 export default Home

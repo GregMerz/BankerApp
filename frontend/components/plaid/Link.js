@@ -67,7 +67,7 @@ const Link = () => {
   }, [ready, open, isOauth])
 
   return (
-    <Button type="button" small onClick={() => open()} disabled={!ready}>
+    <Button type="button" style={{ minWidth: 0 }} small onClick={() => open()} disabled={!ready}>
       Launch Link
     </Button>
   )
